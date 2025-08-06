@@ -1,3 +1,6 @@
 # Handle client-side routing for React SPA
 # All routes should fall back to index.html
-/*    /index.html   200 
+/*    /index.html   200
+
+# Specific redirect for auth callback
+/auth/callback    /index.html   200 

@@ -15,13 +15,19 @@ export const AuthCallback = () => {
     // Process the OAuth callback
     const handleAuthCallback = async () => {
       try {
+        console.log('AuthCallback: Processing callback at URL:', window.location.href);
+        
         // Get the auth code from the URL
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const queryParams = new URLSearchParams(window.location.search);
         
+        console.log('AuthCallback: Hash params:', Object.fromEntries(hashParams));
+        console.log('AuthCallback: Query params:', Object.fromEntries(queryParams));
+        
         // If there's an error in the URL, display it
         const errorParam = hashParams.get('error') || queryParams.get('error');
         if (errorParam) {
+          console.log('AuthCallback: Error found:', errorParam);
           setError(errorParam);
           return;
         }
@@ -29,14 +35,19 @@ export const AuthCallback = () => {
         // Exchange the auth code for a session
         const { data, error } = await supabase.auth.getSession();
         
+        console.log('AuthCallback: Session data:', data);
+        console.log('AuthCallback: Session error:', error);
+        
         if (error) {
           throw error;
         }
 
         if (data?.session) {
+          console.log('AuthCallback: Session found, redirecting to home');
           // Successfully authenticated, redirect to home
           navigate('/');
         } else {
+          console.log('AuthCallback: No session found, redirecting to login');
           // No session found, redirect to login
           navigate('/login');
         }
