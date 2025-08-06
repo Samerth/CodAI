@@ -63,10 +63,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signInWithGoogle = async () => {
     try {
+      // Determine the correct redirect URL based on the current environment
+      let redirectUrl;
+      
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Local development - use localhost:8080 to match Supabase config
+        redirectUrl = 'http://localhost:8080/auth/callback';
+      } else {
+        // Production - use the deployed URL
+        redirectUrl = 'https://render-chat.dynamous.ai/auth/callback';
+      }
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: redirectUrl
         }
       });
       if (error) throw error;
