@@ -70,9 +70,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // Local development - use localhost:8080 to match Supabase config
         redirectUrl = 'http://localhost:8080/auth/callback';
       } else {
-        // Production - use the deployed URL
+        // Production - use the deployed URL with explicit protocol
         redirectUrl = 'https://render-chat.dynamous.ai/auth/callback';
       }
+      
+      console.log('Using redirect URL:', redirectUrl);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
